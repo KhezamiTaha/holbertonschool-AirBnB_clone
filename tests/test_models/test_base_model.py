@@ -54,5 +54,13 @@ class TestBaseClass(unittest.TestCase):
         self.assertEqual(my_model["created_at"], test.created_at.isoformat())
         self.assertEqual(my_model["updated_at"], test.updated_at.isoformat())
 
+    def test_save(self):
+        """ test save method of basemodel """
+        my_new_model = BaseModel()
+        previous = my_new_model.updated_at
+        my_new_model.save()
+        actual = my_new_model.updated_at
+        self.assertTrue(actual > previous)
+
 if __name__ == '__main__':
     unittest.main()
