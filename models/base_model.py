@@ -27,7 +27,11 @@ class BaseModel:
         )
 
     def save(self):
-        self.updated_at = datetime.now()
+        """
+        Updates the updated_at attribute to the
+        current datetime and saves the instance.
+        """
+        self.updated_at = datetime.utcnow()
         storage.save()
 
     def to_dict(self):
