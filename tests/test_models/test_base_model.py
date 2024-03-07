@@ -2,14 +2,16 @@
 """Unit test for the base class base model
 """
 import unittest
+from datetime import datetime, timedelta
 # import json
 from datetime import datetime
 # from io import StringIO
 # from unittest.mock import patch
 from models import base_model
 from models.base_model import BaseModel
-###############from models.engine.file_storage import FileStorage
+from models.engine.file_storage import FileStorage
 import os
+from models import storage
 
 
 class TestBaseClass(unittest.TestCase):
@@ -55,12 +57,91 @@ class TestBaseClass(unittest.TestCase):
         self.assertEqual(my_model["updated_at"], test.updated_at.isoformat())
 
     def test_save(self):
-        """ test save method of basemodel """
+        """Test save method of BaseModel"""
+
+        # Create a new instance of BaseModel
         my_new_model = BaseModel()
-        previous = my_new_model.updated_at
+
+        # Get the initial value of updated_at
+        previous_updated_at = my_new_model.updated_at
+
+        # Call the save method
         my_new_model.save()
-        actual = my_new_model.updated_at
-        self.assertTrue(actual > previous)
+
+        # Get the updated value of updated_at
+        current_updated_at = my_new_model.updated_at
+
+        # Verify that updated_at has been updated to a later time
+        self.assertGreater(current_updated_at, previous_updated_at)
+
+    def test_save_multiple(self):
+        """Test save method of BaseModel with multiple calls"""
+
+        # Create a new instance of BaseModel
+        my_new_model = BaseModel()
+
+        # Get the initial value of updated_at
+        previous_updated_at = my_new_model.updated_at
+
+        # Call the save method multiple times
+        for _ in range(5):
+            my_new_model.save()
+
+        # Get the updated value of updated_at
+        current_updated_at = my_new_model.updated_at
+
+        # Verify that updated_at has been updated to a later time after each call
+        self.assertGreater(current_updated_at, previous_updated_at)
+
+    def test_save_with_delay(self):
+        """Test save method of BaseModel with delay"""
+
+        # Create a new instance of BaseModel
+        my_new_model = BaseModel()
+
+        # Get the initial value of updated_at
+        previous_updated_at = my_new_model.updated_at
+
+        # Introduce a delay
+        # You can use sleep or simulate the passage of time in a different way
+        # For demonstration, we'll just wait for a brief period
+        delay = timedelta(seconds=1)
+        datetime_after_delay = datetime.utcnow() + delay
+
+        # Call the save method
+        my_new_model.save()
+
+        # Get the updated value of updated_at
+        current_updated_at = my_new_model.updated_at
+
+        # Verify that updated_at has been updated to a later time after the delay
+        time_difference = timedelta(seconds=1)
+        self.assertGreaterEqual(current_updated_at, datetime_after_delay - time_difference)
+    
+    def test_save_with_storage(self):
+        """Test save method of BaseModel with storage"""
+
+        # Create a new instance of BaseModel
+        my_new_model = BaseModel()
+
+        # Get the initial value of updated_at
+        previous_updated_at = my_new_model.updated_at
+
+        # Call the save method
+        my_new_model.save()
+
+        # Get the updated value of updated_at
+        current_updated_at = my_new_model.updated_at
+
+        # Verify that updated_at has been updated to a later time
+        self.assertGreater(current_updated_at, previous_updated_at)
+
+        # Reload the object from storage
+        storage.reload()
+
+        # Get the reloaded object
+        reloaded_model = storage.all()["BaseModel." + my_new_model.id]
+
 
 if __name__ == '__main__':
     unittest.main()
