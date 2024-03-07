@@ -65,3 +65,33 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    @unittest.skipIf(models.storage == "db", "not testing file storage")
+    def test_reload(self):
+        """Test that reload properly reloads objects from file.json"""
+
+        # Create some sample objects and save them to file.json
+        sample_objects = {}
+        for key, value in classes.items():
+            instance = value()
+            instance_key = instance.__class__.__name__ + "." + instance.id
+            sample_objects[instance_key] = instance.to_dict()
+
+        with open("file.json", "w") as f:
+            json.dump(sample_objects, f)
+
+        # Clear the __objects dictionary to simulate reloading
+        FileStorage._FileStorage__objects = {}
+
+        # Call reload() method to load objects from file.json
+        storage.reload()
+
+        # Convert loaded dictionary representations to BaseModel objects
+        reloaded_objects = {}
+        for key, value in storage.all().items():
+            class_name, obj_id = key.split('.')
+            obj_class = classes[class_name]
+            reloaded_objects[key] = obj_class(**(value.to_dict())).to_dict()
+
+        # Check if reloaded objects match the sample objects
+        self.assertEqual(reloaded_objects, sample_objects)
