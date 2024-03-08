@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import cmd
-import json
+import shlex
 from models.base_model import BaseModel
 from models import storage
 
@@ -93,6 +93,100 @@ class HBNBCommand(cmd.Cmd):
 
         print(storage.all()[key])
 
+    def do_destroy(self, arg):
+        """
+        Deletes an instance based on class name and id (save the change into the JSON file).
+
+        Args:
+            arg (str): The class name and id of the instance to be deleted.
+
+        """
+        args = arg.split()
+        if not args:
+            print("** class name missing **")
+            return
+
+        class_name = args[0]
+        if class_name not in ['BaseModel']:
+            print("** class doesn't exist **")
+            return
+
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        instance_id = args[1]
+        key = class_name + '.' + instance_id
+        if key not in storage.all():
+            print("** no instance found **")
+            return
+
+        del storage.all()[key]
+        storage.save()
+
+    def do_all(self, arg):
+        """
+        Prints all string representation of all instances based or not on the class name.
+
+        Args:
+            arg (str): The class name for which to print instances.
+
+        """
+        args = arg.split()
+        if not args:
+            print([str(obj) for obj in storage.all().values()])
+            return
+
+        class_name = args[0]
+        if class_name not in ['BaseModel']:
+            print("** class doesn't exist **")
+            return
+
+        print([str(obj) for key, obj in storage.all().items() if key.startswith(class_name)])
+
+    def do_update(self, arg):
+        """
+        Updates an instance based on the class name and id by adding or updating attribute.
+
+        Args:
+            arg (str): The class name, id, attribute name, and attribute value.
+
+        """
+        args = shlex.split(arg)
+        if not args:
+            print("** class name missing **")
+            return
+
+        class_name = args[0]
+        if class_name not in ['BaseModel']:
+            print("** class doesn't exist **")
+            return
+
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        instance_id = args[1]
+        key = class_name + '.' + instance_id
+        if key not in storage.all():
+            print("** no instance found **")
+            return
+
+        if len(args) < 3:
+            print("** attribute name missing **")
+            return
+
+        attribute_name = args[2]
+        if len(args) < 4:
+            print("** value missing **")
+            return
+
+        attribute_value = args[3]
+
+        instance = storage.all()[key]
+        setattr(instance, attribute_name, attribute_value)
+        instance.save()
+
     def help_quit(self):
         """
         Help message for the quit command.
@@ -123,11 +217,28 @@ class HBNBCommand(cmd.Cmd):
         print("Usage: show <class_name> <id>")
         print()
 
-    def help_help(self):
+    def help_destroy(self):
         """
-        Help message for the help command.
+        Help message for the destroy command.
         """
-        print("Show help information for commands.")
+        print("Deletes an instance based on class name and id.")
+        print("Usage: destroy <class_name> <id>")
+        print()
+
+    def help_all(self):
+        """
+        Help message for the all command.
+        """
+        print("Prints all string representation of all instances based or not on the class name.")
+        print("Usage: all [class_name]")
+        print()
+
+    def help_update(self):
+        """
+        Help message for the update command.
+        """
+        print("Updates an instance based on class name and id by adding or updating attribute.")
+        print("Usage: update <class_name> <id> <attribute_name> <attribute_value>")
         print()
 
 
