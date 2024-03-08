@@ -1,17 +1,14 @@
 #!/usr/bin/python3
-"""
-The console : command line interpreter
-"""
 
 import cmd
+import json
+from models.base_model import BaseModel
+from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
     """
     Command interpreter class for HBNB project.
-
-    Attributes:
-        prompt (str): The command prompt string.
     """
 
     prompt = "(hbnb) "
@@ -47,6 +44,25 @@ class HBNBCommand(cmd.Cmd):
         print("Exiting the program...")
         return True
 
+    def do_create(self, arg):
+        """
+        Creates a new instance of BaseModel, saves it, and prints the id.
+
+        Args:
+            arg (str): The class name for which to create an instance.
+
+        """
+        if not arg:
+            print("** class name missing **")
+            return
+
+        try:
+            new_instance = eval(arg)()
+            new_instance.save()
+            print(new_instance.id)
+        except NameError:
+            print("** class doesn't exist **")
+
     def help_quit(self):
         """
         Help message for the quit command.
@@ -61,12 +77,21 @@ class HBNBCommand(cmd.Cmd):
         print("Exit the program.")
         print()
 
+    def help_create(self):
+        """
+        Help message for the create command.
+        """
+        print("Creates a new instance of BaseModel, saves it, and prints the id.")
+        print("Usage: create <class_name>")
+        print()
+
     def help_help(self):
         """
         Help message for the help command.
         """
         print("Show help information for commands.")
         print()
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

@@ -5,7 +5,7 @@ Main_file = test_save_reload_base_model.py
 
 #Main_file = $(number)-main.py
 
-NAME =  Console 0.0.1
+NAME =  def do_create(self, arg):
 NAME1 =  def raise_exception_msg(message=""):
 Function_name = binary_tree_t *binary_tree_node(binary_tree_t *parent, int value);
 number = $(shell echo $(Function_file) | grep -o '[0-9]*' | head -n1)
