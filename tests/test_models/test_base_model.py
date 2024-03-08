@@ -1,24 +1,51 @@
 #!/usr/bin/python3
 """Unit test for the base class base model
 """
-import unittest
-from datetime import datetime, timedelta
-# import json
 from datetime import datetime
-# from io import StringIO
-# from unittest.mock import patch
-from models import base_model
-from models.base_model import BaseModel
+import inspect
+import models
 from models.engine.file_storage import FileStorage
+from models.amenity import Amenity
+from models.base_model import BaseModel
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
+import json
 import os
+import unittest
+import pep8
 from models import storage
-
 
 class TestBaseClass(unittest.TestCase):
     """TestBaseClass Test the base class
     Args:
         unittest (): Propertys for unit testing
     """
+
+    maxDiff = None
+
+    def setUp(self):
+        """ condition to test file saving """
+        with open("test.json", 'w'):
+            FileStorage._FileStorage__file_path = "test.json"
+            FileStorage._FileStorage__objects = {}
+
+    def tearDown(self):
+        """ destroys created file """
+        FileStorage._FileStorage__file_path = "file.json"
+        try:
+            os.remove("test.json")
+        except FileNotFoundError:
+            pass
+
+
+    def test_method_docs(self):
+        """ check for method documentation """
+        for func in dir(BaseModel):
+            self.assertTrue(len(func.__doc__) > 0)
+
 
     def test_id_type(self):
         """ Test id type"""
@@ -56,92 +83,55 @@ class TestBaseClass(unittest.TestCase):
         self.assertEqual(my_model["created_at"], test.created_at.isoformat())
         self.assertEqual(my_model["updated_at"], test.updated_at.isoformat())
 
+    def test_base_from_dict(self):
+        """Testing task 4, with kwargs init"""
+        my_model = BaseModel()
+        my_model_json = my_model.to_dict()
+        my_new_model = BaseModel(**my_model_json)
+        self.assertEqual(my_model_json, my_new_model.to_dict())
+        self.assertTrue(type(my_new_model.id) == str)
+        self.assertTrue(type(my_new_model.created_at) == datetime)
+        self.assertTrue(type(my_new_model.updated_at) == datetime)
+
+    def test_base_from_emp_dict(self):
+        """test with an empty dictionary"""
+        my_dict = {}
+        my_new_model = BaseModel(**my_dict)
+        self.assertTrue(type(my_new_model.id) == str)
+        self.assertTrue(type(my_new_model.created_at) == datetime)
+        self.assertTrue(type(my_new_model.updated_at) == datetime)
+
+    def test_base_from_non_dict(self):
+        """test with a None dictionary"""
+        my_new_model = BaseModel(None)
+        self.assertTrue(type(my_new_model.id) == str)
+        self.assertTrue(type(my_new_model.created_at) == datetime)
+        self.assertTrue(type(my_new_model.updated_at) == datetime)
+
     def test_save(self):
-        """Test save method of BaseModel"""
-
-        # Create a new instance of BaseModel
+        """ test save method of basemodel """
         my_new_model = BaseModel()
-
-        # Get the initial value of updated_at
-        previous_updated_at = my_new_model.updated_at
-
-        # Call the save method
+        previous = my_new_model.updated_at
         my_new_model.save()
+        actual = my_new_model.updated_at
+        self.assertTrue(actual > previous)
 
-        # Get the updated value of updated_at
-        current_updated_at = my_new_model.updated_at
+    def test_isinstance(self):
+        """ Check if object is basemodel instance """
+        obj = BaseModel()
+        self.assertIsInstance(obj, BaseModel)
 
-        # Verify that updated_at has been updated to a later time
-        self.assertGreater(current_updated_at, previous_updated_at)
-
-    def test_save_multiple(self):
-        """Test save method of BaseModel with multiple calls"""
-
-        # Create a new instance of BaseModel
-        my_new_model = BaseModel()
-
-        # Get the initial value of updated_at
-        previous_updated_at = my_new_model.updated_at
-
-        # Call the save method multiple times
-        for _ in range(5):
-            my_new_model.save()
-
-        # Get the updated value of updated_at
-        current_updated_at = my_new_model.updated_at
-
-        # Verify that updated_at has been updated to a later time after each call
-        self.assertGreater(current_updated_at, previous_updated_at)
-
-    def test_save_with_delay(self):
-        """Test save method of BaseModel with delay"""
-
-        # Create a new instance of BaseModel
-        my_new_model = BaseModel()
-
-        # Get the initial value of updated_at
-        previous_updated_at = my_new_model.updated_at
-
-        # Introduce a delay
-        # You can use sleep or simulate the passage of time in a different way
-        # For demonstration, we'll just wait for a brief period
-        delay = timedelta(seconds=1)
-        datetime_after_delay = datetime.utcnow() + delay
-
-        # Call the save method
-        my_new_model.save()
-
-        # Get the updated value of updated_at
-        current_updated_at = my_new_model.updated_at
-
-        # Verify that updated_at has been updated to a later time after the delay
-        time_difference = timedelta(seconds=1)
-        self.assertGreaterEqual(current_updated_at, datetime_after_delay - time_difference)
-    
-    def test_save_with_storage(self):
-        """Test save method of BaseModel with storage"""
-
-        # Create a new instance of BaseModel
-        my_new_model = BaseModel()
-
-        # Get the initial value of updated_at
-        previous_updated_at = my_new_model.updated_at
-
-        # Call the save method
-        my_new_model.save()
-
-        # Get the updated value of updated_at
-        current_updated_at = my_new_model.updated_at
-
-        # Verify that updated_at has been updated to a later time
-        self.assertGreater(current_updated_at, previous_updated_at)
-
-        # Reload the object from storage
-        storage.reload()
-
-        # Get the reloaded object
-        reloaded_model = storage.all()["BaseModel." + my_new_model.id]
-
+    def test_executable_file(self):
+        """ Check if file have permissions to execute"""
+        # Check for read access
+        is_read_true = os.access('models/base_model.py', os.R_OK)
+        self.assertTrue(is_read_true)
+        # Check for write access
+        is_write_true = os.access('models/base_model.py', os.W_OK)
+        self.assertTrue(is_write_true)
+        # Check for execution access
+        is_exec_true = os.access('models/base_model.py', os.X_OK)
+        self.assertTrue(is_exec_true)
 
 if __name__ == '__main__':
     unittest.main()

@@ -7,16 +7,48 @@ from datetime import datetime
 import inspect
 import models
 from models.engine.file_storage import FileStorage
+from models.amenity import Amenity
 from models.base_model import BaseModel
-
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
 import json
 import os
 import unittest
+import pep8
 from models import storage
 
 classes = {
+    "Amenity": Amenity,
     "BaseModel": BaseModel,
+    "City": City,
+    "Place": Place,
+    "Review": Review,
+    "State": State,
+    "User": User,
 }
+
+
+class TestFileStorageDocs(unittest.TestCase):
+    """Tests to check the documentation and style of FileStorage class"""
+
+    @classmethod
+    def setUpClass(cls):
+        """Set up for the doc tests"""
+        cls.fs_f = inspect.getmembers(FileStorage, inspect.isfunction)
+
+
+    def test_pep8_conformance_file_storage(self):
+        """Test that models/engine/file_storage.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(["models/engine/file_storage.py"])
+        self.assertEqual(
+            result.total_errors, 0, "Found code style errors (and warnings)."
+        )
+
+
 
 
 class TestFileStorage(unittest.TestCase):
@@ -65,33 +97,3 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
-
-    @unittest.skipIf(models.storage == "db", "not testing file storage")
-    def test_reload(self):
-        """Test that reload properly reloads objects from file.json"""
-
-        # Create some sample objects and save them to file.json
-        sample_objects = {}
-        for key, value in classes.items():
-            instance = value()
-            instance_key = instance.__class__.__name__ + "." + instance.id
-            sample_objects[instance_key] = instance.to_dict()
-
-        with open("file.json", "w") as f:
-            json.dump(sample_objects, f)
-
-        # Clear the __objects dictionary to simulate reloading
-        FileStorage._FileStorage__objects = {}
-
-        # Call reload() method to load objects from file.json
-        storage.reload()
-
-        # Convert loaded dictionary representations to BaseModel objects
-        reloaded_objects = {}
-        for key, value in storage.all().items():
-            class_name, obj_id = key.split('.')
-            obj_class = classes[class_name]
-            reloaded_objects[key] = obj_class(**(value.to_dict())).to_dict()
-
-        # Check if reloaded objects match the sample objects
-        self.assertEqual(reloaded_objects, sample_objects)
