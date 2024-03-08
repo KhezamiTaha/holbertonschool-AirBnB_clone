@@ -63,6 +63,36 @@ class HBNBCommand(cmd.Cmd):
         except NameError:
             print("** class doesn't exist **")
 
+    def do_show(self, arg):
+        """
+        Prints the string representation of an instance based on class name and id.
+
+        Args:
+            arg (str): The class name and id of the instance.
+
+        """
+        args = arg.split()
+        if not args:
+            print("** class name missing **")
+            return
+
+        class_name = args[0]
+        if class_name not in ['BaseModel']:
+            print("** class doesn't exist **")
+            return
+
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        instance_id = args[1]
+        key = class_name + '.' + instance_id
+        if key not in storage.all():
+            print("** no instance found **")
+            return
+
+        print(storage.all()[key])
+
     def help_quit(self):
         """
         Help message for the quit command.
@@ -83,6 +113,14 @@ class HBNBCommand(cmd.Cmd):
         """
         print("Creates a new instance of BaseModel, saves it, and prints the id.")
         print("Usage: create <class_name>")
+        print()
+
+    def help_show(self):
+        """
+        Help message for the show command.
+        """
+        print("Prints the string representation of an instance based on class name and id.")
+        print("Usage: show <class_name> <id>")
         print()
 
     def help_help(self):
