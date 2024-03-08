@@ -3,6 +3,7 @@
 import cmd
 import shlex
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 
@@ -77,7 +78,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         class_name = args[0]
-        if class_name not in ['BaseModel']:
+        if class_name not in ['BaseModel', 'User']:
             print("** class doesn't exist **")
             return
 
@@ -107,7 +108,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         class_name = args[0]
-        if class_name not in ['BaseModel']:
+        if class_name not in ['BaseModel', 'User']:
             print("** class doesn't exist **")
             return
 
@@ -138,7 +139,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         class_name = args[0]
-        if class_name not in ['BaseModel']:
+        if class_name not in ['BaseModel', 'User']:
             print("** class doesn't exist **")
             return
 
@@ -158,7 +159,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         class_name = args[0]
-        if class_name not in ['BaseModel']:
+        if class_name not in ['BaseModel', 'User']:
             print("** class doesn't exist **")
             return
 

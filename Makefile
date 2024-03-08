@@ -1,7 +1,7 @@
 #This is a Makefile
 
 Function_file = ./models/base_model.py
-Main_file = test_save_reload_base_model.py
+Main_file = User class implementation
 
 #Main_file = $(number)-main.py
 

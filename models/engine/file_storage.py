@@ -25,6 +25,7 @@ class FileStorage:
         """Deserializes the JSON file to __objects."""
         if os.path.exists(self.__file_path):
             from models.base_model import BaseModel
+            from models.user import User
             with open(self.__file_path, 'r') as file:
                 obj_dict = json.load(file)
                 for key, value in obj_dict.items():
