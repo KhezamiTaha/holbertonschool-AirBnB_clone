@@ -26,6 +26,12 @@ class FileStorage:
         if os.path.exists(self.__file_path):
             from models.base_model import BaseModel
             from models.user import User
+            from models.state import State
+            from models.city import City
+            from models.amenity import Amenity
+            from models.review import Review
+            from models.place import Place
+
             with open(self.__file_path, 'r') as file:
                 obj_dict = json.load(file)
                 for key, value in obj_dict.items():
