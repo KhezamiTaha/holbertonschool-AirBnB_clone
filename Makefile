@@ -1,11 +1,11 @@
 #This is a Makefile
 
 Function_file = ./models/base_model.py
-Main_file = User class implementation
+Main_file = test_save_reload_user.py
 
 #Main_file = $(number)-main.py
 
-NAME =  do_all do_update
+NAME =  User class
 NAME1 =  def raise_exception_msg(message=""):
 Function_name = binary_tree_t *binary_tree_node(binary_tree_t *parent, int value);
 number = $(shell echo $(Function_file) | grep -o '[0-9]*' | head -n1)
