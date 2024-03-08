@@ -10,6 +10,6 @@ class State(BaseModel):
     State class that inherits from BaseModel.
 
     Public class attributes:
-        name (str): The name of the state (empty string by default).
+        name (str): The name
     """
     name = ''

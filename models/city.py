@@ -12,8 +12,8 @@ class City(BaseModel):
     City class that inherits from BaseModel.
 
     Public class attributes:
-        state_id (str): The ID of the state associated with the city (empty string by default).
-        name (str): The name of the city (empty string by default).
+        state_id (str): The ID of the state associated
+        name (str): The name
     """
     state_id = ''
     name = ''
