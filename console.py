@@ -52,7 +52,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """
-        Creates a new instance of BaseModel, saves it, and prints the id.
+        Creates a new instance of BaseModel, saves it,
 
         Args:
             arg (str): The class name for which to create an instance.
@@ -71,7 +71,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, arg):
         """
-        Prints the string representation of an instance based on class name and id.
+        Prints the string representation of an instance
 
         Args:
             arg (str): The class name and id of the instance.
@@ -101,7 +101,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, arg):
         """
-        Deletes an instance based on class name and id (save the change into the JSON file).
+        Deletes an instance based on class name and id
 
         Args:
             arg (str): The class name and id of the instance to be deleted.
@@ -132,7 +132,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg):
         """
-        Prints all string representation of all instances based or not on the class name.
+        Prints all string representation of all instances
 
         Args:
             arg (str): The class name for which to print instances.
@@ -152,7 +152,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """
-        Updates an instance based on the class name and id by adding or updating attribute.
+        Updates an instance based on the class name and id by 
 
         Args:
             arg (str): The class name, id, attribute name, and attribute value.
@@ -164,7 +164,8 @@ class HBNBCommand(cmd.Cmd):
             return
 
         class_name = args[0]
-        if class_name not in ['BaseModel', 'User','Place', 'City', 'State', 'Review', 'Amenity']:
+        if class_name not in ['BaseModel', 'User','Place', 'City', 'State',
+                                'Review', 'Amenity']:
             print("** class doesn't exist **")
             return
 
@@ -243,8 +244,8 @@ class HBNBCommand(cmd.Cmd):
         """
         Help message for the update command.
         """
-        print("Updates an instance based on class name and id by adding or updating attribute.")
-        print("Usage: update <class_name> <id> <attribute_name> <attribute_value>")
+        print("Updates an instance based on class name")
+        print("Usage: update <class_name> <id> <attribute_name>")
         print()
 
 
