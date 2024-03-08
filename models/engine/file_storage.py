@@ -21,7 +21,7 @@ class FileStorage:
             obj_dict = {key: obj.to_dict()
                         for key, obj in self.__objects.items()}
             json.dump(obj_dict, file)
-    
+
     def reload(self):
         """Deserializes the JSON file to __objects."""
         if os.path.exists(self.__file_path):
