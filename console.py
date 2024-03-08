@@ -156,7 +156,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """
-        Updates an instance based on the class name and id by 
+        Updates an instance based on the class name and id by
 
         Args:
             arg (str): The class name, id, attribute name, and attribute value.
@@ -168,8 +168,8 @@ class HBNBCommand(cmd.Cmd):
             return
 
         class_name = args[0]
-        if class_name not in ['BaseModel', 'User','Place', 'City', 'State',
-                                'Review', 'Amenity']:
+        if class_name not in ['BaseModel', 'User', 'Place', 'City', 'State',
+                              'Review', 'Amenity']:
             print("** class doesn't exist **")
             return
 
@@ -216,7 +216,7 @@ class HBNBCommand(cmd.Cmd):
         """
         Help message for the create command.
         """
-        print("Creates a new instance of BaseModel, saves it, and prints the id.")
+        print("Creates a new instance of BaseModel, saves it")
         print("Usage: create <class_name>")
         print()
 
@@ -224,7 +224,7 @@ class HBNBCommand(cmd.Cmd):
         """
         Help message for the show command.
         """
-        print("Prints the string representation of an instance based on class name and id.")
+        print("Prints the string representation of an instance")
         print("Usage: show <class_name> <id>")
         print()
 
@@ -240,7 +240,7 @@ class HBNBCommand(cmd.Cmd):
         """
         Help message for the all command.
         """
-        print("Prints all string representation of all instances based or not on the class name.")
+        print("Prints all string representation of all instances")
         print("Usage: all [class_name]")
         print()
 
