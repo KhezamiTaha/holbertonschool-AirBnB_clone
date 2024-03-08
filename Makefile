@@ -97,27 +97,4 @@ echo:
 valgrind:
 	valgrind ./$(NAME)
 
-brk:
-	touch $(SRC) 
-	grep -v '#endif' $(Header) > temp_file && mv temp_file $(Header)
-	echo  "$(Function_name)"  >> "$(Header)"
-	echo  "#endif"  >> "$(Header)"
 
-	echo "$(Final_header)" >> "$(Function_file)"
-	echo      ""            >> "$(Function_file)"
-	echo  "/**"               >> "$(Function_file)"
-	echo    " *"            >> "$(Function_file)"
-	echo     $(Function_file_final)            >> "$(Function_file)"
-	echo    " - Algorithms function"            >> "$(Function_file)"
-	echo  " *@: pointer"              >> "$(Function_file)"
-	echo  " *@: pointer"              >> "$(Function_file)"
-	echo  " *"            >> "$(Function_file)"
-	echo  " *Return: 1 or 0"             >> "$(Function_file)"
-	echo  " */"            >> "$(Function_file)"
-	echo      ""            >> "$(Function_file)"
-	echo      ""            >> "$(Function_file)"
-	echo      ""            >> "$(Function_file)"
-	echo  "/**"   >> "$(Function_file)"
-	echo  " * To-Do :  Variables Description"   >> "$(Function_file)"
-	echo  " *          Formt document"   >> "$(Function_file)"
-	echo  " */"   >> "$(Function_file)"
