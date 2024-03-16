@@ -1,0 +1,17 @@
+header {
+    border-bottom: 1px solid #CCCCCC;
+    width: 100%;
+    height: 70px;
+    background-color: white;
+    position: fixed;
+  }
+
+  .logo {
+    width: 100%; /* Adjust as needed */
+    height: 100%; /* Maintain header's height */
+    background-image: url('../images/logo.png');
+    background-repeat: no-repeat;
+    background-position: 20px center; /* 20px space at the left */
+    display: flex;
+    align-items: center; /* Center vertically */
+  }
