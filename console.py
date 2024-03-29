@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+"""
+Command interpreter for HBNB project.
+"""
 
 import cmd
 import shlex
