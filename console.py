@@ -188,7 +188,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg):
         """
-        Prints all string representation of all instances
+        Prints all string representation  of all instances
 
         Args:
             arg (str): The class name for which to print instances.
