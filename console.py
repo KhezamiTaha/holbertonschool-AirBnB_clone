@@ -22,6 +22,7 @@ class HBNBCommand(cmd.Cmd):
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
 
     prompt = "(hbnb) "
+
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
 
@@ -30,7 +31,7 @@ class HBNBCommand(cmd.Cmd):
         """
         _cmd = _cls = _id = _args = ''  # initialize line elements
 
-        # scan for general formating - i.e '.', '(', ')'            
+        # scan for general formating - i.e '.', '(', ')'
         if not ('.' in line and '(' in line and ')' in line):
             return line
 
@@ -46,7 +47,7 @@ class HBNBCommand(cmd.Cmd):
                 raise Exception
 
             # if parantheses contain arguments, parse them
-            pline = pline[pline.find('(') + 1:pline.find(')')]     
+            pline = pline[pline.find('(') + 1:pline.find(')')]
             if pline:
                 # partition args: (<id>, [<delim>], [<*args>])
                 pline = pline.partition(', ')  # pline convert to tuple
@@ -60,7 +61,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] == '{' and pline[-1] =='}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -207,6 +208,7 @@ class HBNBCommand(cmd.Cmd):
 
         print([str(obj) for key, obj in storage.all().items()
                if key.startswith(class_name)])
+
     def do_count(self, arg):
         """
         Updates an instance based on the class name and id by
@@ -221,7 +223,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         if args[0] not in ['BaseModel', 'User', 'Place',
-                              'City', 'State', 'Review', 'Amenity']:
+                           'City', 'State', 'Review', 'Amenity']:
             print("** class doesn't exist **")
             return
         for key in storage.all():
